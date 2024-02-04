@@ -21,12 +21,12 @@ ansible-playbook local.yml
 
 ## Available roles
 ```yaml
-#grep -rohP 'tags:.*\[\K[^]]+' . | tr -d '"' | tr ',' '\n' | tr -d ' ' | sort -u | jq -R '[inputs]'
+#grep -rohP 'tags:.*\[\K[^]]+' . --exclude README.md | tr -d '"' | tr ',' '\n' | tr -d ' ' | sort -u | jq -R '[inputs]'
 [
-  "apt-repos",
   "bs",
   "discord",
   "dotfiles",
+  "files",
   "folder-structure",
   "gui",
   "install",
@@ -40,5 +40,4 @@ ansible-playbook local.yml
 ```
 
 ## Todo
-- [ ] Dotfiles
 - [ ] GUI

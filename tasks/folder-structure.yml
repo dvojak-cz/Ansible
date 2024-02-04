@@ -1,0 +1,19 @@
+- name: Name of task
+  debug:
+    msg: SETTING UP FOLDER STRUCTURE
+  tags: &tags_for_folder_structure ["folder-structure", "bs"]
+
+- name: Create base dirs
+  become: true
+  loop:
+    - "{{ HOME }}/dev/fit"
+    - "{{ HOME }}/dev/personal"
+    - "{{ HOME }}/dev/recombee"
+    - "{{ HOME }}/tmp"
+    - "{{ HOME }}/documents"
+    - "{{ HOME }}/downloads"
+    - "{{ HOME }}/tools"
+  file:
+    path: "{{item}}"
+    state: directory
+  tags: *tags_for_folder_structure

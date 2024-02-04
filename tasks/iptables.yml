@@ -1,0 +1,39 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP IPTABLES"
+  tags: &tags_for_iptables ["iptables", "bs"]
+
+- name: Install iptables
+  become: true
+  apt:
+    name: iptables
+    state: present
+  tags: *tags_for_iptables
+
+- name: Create LOG_DROP chain
+  become: true
+  iptables:
+    chain: LOG_DROP
+    policy: DROP
+    state: present
+    chain_management: true
+  tags: *tags_for_iptables
+
+- name: Log LOG_DROP chain
+  become: true
+  iptables:
+    chain: LOG_DROP
+    protocol: all
+    jump: LOG
+    log_prefix: "IPTABLES:DROP: "
+    action: insert
+    state: present
+  tags: *tags_for_iptables
+
+- name: DROP all incoming packets
+  become: true
+  iptables:
+    chain: INPUT
+    jump: LOG_DROP
+    state: present
+  tags: *tags_for_iptables

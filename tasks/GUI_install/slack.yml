@@ -1,0 +1,23 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP SLACK"
+  tags: &tags_for_slack ["slack", "bs"]
+
+- name: Download Slack
+  get_url:
+    url: https://downloads.slack-edge.com/linux_releases/slack-desktop-4.19.2-amd64.deb
+    dest: /tmp/slack.deb
+  tags: *tags_for_slack
+
+- name: Remove Any previous slacks
+  become: true
+  apt:
+    name: slack-desktop
+    state: absent
+  tags: *tags_for_slack
+
+- name: Install Slack .deb package
+  become: true
+  apt:
+    deb: /tmp/slack.deb
+  tags: *tags_for_slack

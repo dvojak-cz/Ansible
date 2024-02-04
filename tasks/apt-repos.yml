@@ -1,0 +1,64 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP APT REPOSITORIES"
+  tags: &tags_for_repos ["apt-repos", "bs", "install"]
+
+- name: Create keyrings directory
+  become: true
+  file:
+    path: "{{ keyrings }}"
+    state: directory
+    recurse: yes
+    mode: "0755"
+  tags: *tags_for_repos
+
+- name: Add apt repository
+  vars:
+    apt_repositories:
+      - name: Docker
+        key_url: https://download.docker.com/linux/debian/gpg
+        keyring: "{{ keyrings }}/docker.gpg"
+        repo: deb [arch=amd64 signed-by={{ keyrings }}/docker.gpg] https://download.docker.com/linux/debian {{ code_name }} stable
+        filename: docker
+      - name: GitLFS
+        key_url: https://packagecloud.io/github/git-lfs/gpgkey
+        keyring: "{{ keyrings }}/git-lfs.gpg"
+        repo: deb [signed-by={{ keyrings }}/git-lfs.gpg] https://packagecloud.io/github/git-lfs/debian/ {{ code_name }} main
+        filename: git-lfs
+      - name: VS code
+        key_url: https://packages.microsoft.com/keys/microsoft.asc
+        keyring: "{{ keyrings }}/microsoft.gpg"
+        repo: deb [signed-by={{ keyrings }}/microsoft.gpg] https://packages.microsoft.com/repos/code stable main
+        filename: vscode
+      - name: K8S
+        key_url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+        keyring: "{{ keyrings }}/k8s.gpg"
+        repo: deb [signed-by={{ keyrings }}/k8s.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /
+        filename: k8s
+      - name: Brave-browser
+        key_url: https://brave-browser-apt-release.s3.brave.com/brave-browser-archive-keyring.gpg
+        keyring: "{{ keyrings }}/brave-browser.gpg"
+        repo: deb [signed-by={{ keyrings }}/brave-browser.gpg] https://brave-browser-apt-release.s3.brave.com/ stable main
+        filename: brave-browser
+  block:
+    - name: "Add apt key for {{ item.name }}"
+      become: true
+      apt_key:
+        url: "{{ item.key_url }}"
+        keyring: "{{ item.keyring }}"
+      loop: "{{ apt_repositories }}"
+      tags: *tags_for_repos
+
+    - name: "Add apt repository for {{ item.name }}"
+      become: true
+      apt_repository:
+        repo: "{{ item.repo }}"
+        filename: "{{ item.filename }}"
+      loop: "{{ apt_repositories }}"
+      tags: *tags_for_repos
+
+- name: Update apt
+  become: true
+  apt:
+    update_cache: true
+  tags: *tags_for_repos

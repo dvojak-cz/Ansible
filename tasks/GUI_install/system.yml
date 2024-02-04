@@ -1,0 +1,29 @@
+# install i3...
+- name: Name of task
+  debug:
+    msg: "SETTING UP GUI"
+  tags: &tags_for_gui ["gui", "bs"]
+
+- name: Install GUI
+  become: true
+  apt:
+    name:
+      - i3
+      - i3lock
+      - i3status
+      - thunar # file manager
+      #- pcmanfm  # file manager
+      - evince # pdf viewer
+      #- okular    # pdf viewer
+      - terminator
+      - vlc
+      - network-manager-openvpn-gnome
+      - brave-browser
+      - code
+      - pipewire-audio
+      - pavucontrol
+      - xrandr
+      - arandr
+    state: latest
+    install_recommends: no
+  tags: *tags_for_gui

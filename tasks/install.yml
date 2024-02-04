@@ -1,0 +1,105 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP SYSTEM PACKAGES"
+  tags: &tags_for_install ["install", "bs"]
+
+- name: Install system packages 1
+  become: true
+  apt:
+    name:
+      - gnupg2
+      - ca-certificates
+      - curl
+      - gnupg
+      - wget
+      - tar
+      - ssh
+      - net-tools
+      - vim
+    state: latest
+  tags: *tags_for_install
+
+- name: Install system packages 2
+  become: true
+  apt:
+    name:
+      - sudo
+      - zip
+      - unzip
+      - git
+      - gcc
+      - g++
+      - python3-dev
+      - make
+    state: latest
+  tags: *tags_for_install
+
+- name: Install system packages 3
+  become: true
+  apt:
+    name:
+      - htop
+      - mc
+      - nano
+      - less
+      - tig
+      - aptitude
+      - tmux
+      - git-lfs
+      - network-manager
+      - openvpn
+      - network-manager-openvpn
+    state: latest
+  tags: *tags_for_install
+
+- name: Install OPS tools
+  become: true
+  apt:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+      - docker-buildx-plugin
+      - docker-compose-plugin
+      - kubectl
+    state: latest
+  tags: *tags_for_install
+
+- name: Create bin directory
+  file:
+    path: "{{ HOME }}/bin"
+    state: directory
+  tags: *tags_for_install
+
+- name: Install Go
+  block:
+    - name: Create go_root directory
+      file:
+        path: "{{ HOME }}/bin/go_root"
+        state: directory
+      tags: *tags_for_install
+    - name: Extract Go
+      unarchive:
+        src: https://go.dev/dl/go1.21.6.linux-amd64.tar.gz
+        dest: "{{ HOME }}/bin/go_root"
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+        creates: "{{ HOME }}/bin/go_root/bin/go"
+      tags: *tags_for_install
+    - name: Create link to go
+      file:
+        src: "{{ HOME }}/bin/go_root/bin/go"
+        dest: "{{ HOME }}/bin/go"
+        state: link
+      tags: *tags_for_install
+
+- name: Install GO packages
+  loop:
+    - sigs.k8s.io/kind@latest
+    - github.com/mikefarah/yq/v4@latest
+    - github.com/derailed/k9s@latest
+    - github.com/cloudflare/cfssl/cmd/cfssl@latest
+    - github.com/cloudflare/cfssl/cmd/cfssljson@latest
+  command:
+    cmd: "{{ HOME }}/bin/go install {{ item }}"
+  tags: *tags_for_install

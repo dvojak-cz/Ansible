@@ -1,0 +1,23 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP DISCORD"
+  tags: &tags_for_discord ["discord", "bs"]
+
+- name: Download discord
+  get_url:
+    url: https://discord.com/api/download?platform=linux&format=deb
+    dest: /tmp/discord.deb
+  tags: *tags_for_discord
+
+- name: Remove Any previous discords
+  become: true
+  apt:
+    name: discord
+    state: absent
+  tags: *tags_for_discord
+
+- name: Install Discord .deb package
+  become: true
+  apt:
+    deb: /tmp/discord.deb
+  tags: *tags_for_discord

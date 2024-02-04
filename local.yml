@@ -1,0 +1,31 @@
+- hosts: localhost
+  pre_tasks:
+    - name: Update Apt
+      become: true
+      apt:
+        update_cache: true
+    - name: Install software required for secure apt
+      become: true
+      loop:
+        - gnupg2
+        - ca-certificates
+      apt:
+        name: "{{ item }}"
+  vars:
+    keyrings: /etc/apt/keyrings
+    code_name: bookworm
+    release: stable
+    HOME: "{{ lookup('ansible.builtin.env', 'HOME') }}"
+    FILES_SOURCE: "./files"
+    #USER: "{{ lookup('ansible.builtin.env', 'USER') | default('jan') }}"
+    USER: jan
+  tasks:
+    - import_tasks: tasks/folder-structure.yml
+    - import_tasks: tasks/ssh.yml
+    #- import_tasks: tasks/iptables.yml
+    - import_tasks: tasks/secret-files.yml
+    - import_tasks: tasks/apt-repos.yml
+    - import_tasks: tasks/GUI_install/slack.yml
+    - import_tasks: tasks/GUI_install/discord.yml
+    - import_tasks: tasks/install.yml
+    - import_tasks: tasks/zsh.yml

@@ -1,0 +1,27 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP SSH CLIENT"
+  tags: &tags_for_ssh ["ssh", "dotfiles", "bs"]
+
+- name: Ensure .ssh directory exists.
+  file:
+    dest: "{{ HOME }}/.ssh"
+    mode: 0700
+    state: directory
+  tags: *tags_for_ssh
+
+- name: Install ssh key
+  copy:
+    src: "{{ FILES_SOURCE }}/.ssh/"
+    dest: "{{ HOME }}/.ssh"
+    mode: 0400
+  tags: *tags_for_ssh
+
+#- name: Set authorized key took from file
+#  authorized_key:
+#    user: "{{ USER }}"
+#    state: present
+#    key: "{{ HOME }}/.ssh/id_rsa.pub"
+#  with_fileglob:
+#    - "{{ HOME }}/.ssh/*.pub"
+#  tags: *tags_for_ssh

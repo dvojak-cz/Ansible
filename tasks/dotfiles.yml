@@ -1,0 +1,32 @@
+- name: Name of task
+  debug:
+    msg: "SETTING UP DOTFILES"
+  tags: &tags_for_dotfiles ["dotfiles", "bs"]
+
+- name: Install stow
+  become: true
+  apt:
+    name: ["stow", "make"]
+    state: present
+  tags: *tags_for_dotfiles
+
+- name: Clonning .dofiles
+  git:
+    repo: git@github.com:dvojak-cz/dotfiles.git
+    dest: "{{ HOME }}/.dotfiles"
+    track_submodules: true
+    recursive: true
+    accept_hostkey: yes
+  tags: *tags_for_dotfiles
+
+- name: Stow dotfiles
+  shell: cd {{ HOME }}/.dotfiles && make stow
+  tags: *tags_for_dotfiles
+  failed_when: false
+  register: stow_output
+
+- debug: msg="{{ stow_output.stdout }}"
+  tags: *tags_for_dotfiles
+
+- debug: msg="{{ stow_output.stderr }}"
+  tags: *tags_for_dotfiles

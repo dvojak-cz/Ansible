@@ -6,7 +6,7 @@ build:
 run: build
 	sudo docker run --cap-add=NET_ADMIN -v $(shell pwd):/home/jan/ansible:ro -it --name as ansible-setup || docker start -i as
 
-debug:
+debug: build
 	sudo docker run --cap-add=NET_ADMIN -v $(shell pwd):/home/jan/ansible:ro -it --rm ansible-setup /bin/bash
 
 clean:

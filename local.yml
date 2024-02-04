@@ -29,3 +29,4 @@
     - import_tasks: tasks/GUI_install/discord.yml
     - import_tasks: tasks/install.yml
     - import_tasks: tasks/zsh.yml
+    - import_tasks: tasks/dotfiles.yml

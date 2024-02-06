@@ -6,24 +6,32 @@
 
 - name: Install GUI
   become: true
+  loop:
+    - i3
+    - i3lock
+    - i3status
+    - dmenu
+    - xorg
+    - lightdm
+    #- slick-greeter
+    #- lightdm-settings
+    #- lxappearance
+    #- nitrogen BG
+    - pulseaudio
+    - pavucontrol
+    #- pipewire-audio
+    #- alsa-utils
+    - terminator
+    - thunar # file manager
+    - evince # pdf viewer
+    - vlc
+    - network-manager-openvpn-gnome
+    - network-manager-gnome
+    - brave-browser
+    - code
+    - x11-xserver-utils
   apt:
-    name:
-      - i3
-      - i3lock
-      - i3status
-      - thunar # file manager
-      #- pcmanfm  # file manager
-      - evince # pdf viewer
-      #- okular    # pdf viewer
-      - terminator
-      - vlc
-      - network-manager-openvpn-gnome
-      - brave-browser
-      - code
-      - pipewire-audio
-      - pavucontrol
-      - xrandr
-      - arandr
+    name: "{{ item }}"
     state: latest
     install_recommends: no
   tags: *tags_for_gui

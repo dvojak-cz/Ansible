@@ -97,9 +97,11 @@
   loop:
     - sigs.k8s.io/kind@latest
     - github.com/mikefarah/yq/v4@latest
-    - github.com/derailed/k9s@latest
+    - github.com/derailed/k9s@v0.28
     - github.com/cloudflare/cfssl/cmd/cfssl@latest
     - github.com/cloudflare/cfssl/cmd/cfssljson@latest
+    - github.com/wagoodman/dive@latest
   command:
     cmd: "{{ HOME }}/bin/go install {{ item }}"
   tags: *tags_for_install
+  when: false

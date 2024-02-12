@@ -30,6 +30,8 @@
     - brave-browser
     - code
     - x11-xserver-utils
+    #- imagemagick
+    #- scrot
   apt:
     name: "{{ item }}"
     state: latest

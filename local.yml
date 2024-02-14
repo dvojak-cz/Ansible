@@ -20,13 +20,15 @@
     #USER: "{{ lookup('ansible.builtin.env', 'USER') | default('jan') }}"
     USER: jan
   tasks:
-    - import_tasks: tasks/folder-structure.yml
-    - import_tasks: tasks/ssh.yml
+    #- import_tasks: tasks/folder-structure.yml
+    #- import_tasks: tasks/ssh.yml
     #- import_tasks: tasks/iptables.yml
-    - import_tasks: tasks/secret-files.yml
-    - import_tasks: tasks/apt-repos.yml
-    - import_tasks: tasks/GUI_install/slack.yml
-    - import_tasks: tasks/GUI_install/discord.yml
-    - import_tasks: tasks/install.yml
-    - import_tasks: tasks/zsh.yml
-    - import_tasks: tasks/files.yml
+    #- import_tasks: tasks/secret-files.yml
+    #- import_tasks: tasks/apt-repos.yml
+    #- import_tasks: tasks/GUI_install/slack.yml
+    #- import_tasks: tasks/GUI_install/discord.yml
+    #- import_tasks: tasks/GUI_install/system.yml
+    - import_tasks: tasks/GUI_install/apps.yml
+    #- import_tasks: tasks/install.yml
+    #- import_tasks: tasks/zsh.yml
+    #- import_tasks: tasks/files.yml

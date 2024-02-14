@@ -30,10 +30,16 @@
     - brave-browser
     - code
     - x11-xserver-utils
-    #- imagemagick
-    #- scrot
+    - imagemagick #custom lock
+    - scrot #custom lock
+    - autorandr
+    - light
+    - yubikey-manager #https://gist.github.com/artizirk/d09ce3570021b0f65469cb450bee5e29
+    - xinput
+    - screengrap
   apt:
     name: "{{ item }}"
     state: latest
     install_recommends: no
   tags: *tags_for_gui
+#nvim, slack, telegram, toolbox, obsidian, sync, toolbox, kwm

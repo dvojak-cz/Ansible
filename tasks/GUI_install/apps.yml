@@ -1,0 +1,23 @@
+- name: Install web deb
+  loop:
+    - https://github.com/obsidianmd/obsidian-releases/releases/download/v1.5.3/obsidian_1.5.3_amd64.deb
+    - https://downloads.slack-edge.com/releases/linux/4.36.140/prod/x64/slack-desktop-4.36.140-amd64.deb
+  ansible.builtin.apt:
+    deb: "{{ item }}"
+
+- name: Install telegram
+  unarchive:
+    src: https://telegram.org/dl/desktop/linux
+    dest: "{{ HOME }}/bin/"
+    remote_src: yes
+    include:
+      - Telegram/Telegram
+    extra_opts:
+      - --strip-components=1
+    creates: "{{ HOME }}/bin/telegram"
+  register: telegram_unarchive
+
+- name: Rename Telegram to telegram
+  command:
+    cmd: mv "{{ HOME }}/bin/Telegram" "{{ HOME }}/bin/telegram"
+  when: telegram_unarchive.changed # Conditionally execute based on previous task's change status

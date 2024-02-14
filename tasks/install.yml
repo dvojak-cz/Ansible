@@ -104,4 +104,3 @@
   command:
     cmd: "{{ HOME }}/bin/go install {{ item }}"
   tags: *tags_for_install
-  when: false

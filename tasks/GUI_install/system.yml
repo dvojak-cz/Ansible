@@ -7,36 +7,26 @@
 - name: Install GUI
   become: true
   loop:
-    - i3
-    - i3lock
-    - i3status
     - dmenu
-    - xorg
-    - lightdm
-    #- slick-greeter
-    #- lightdm-settings
-    #- lxappearance
-    #- nitrogen BG
     - pulseaudio
     - pavucontrol
-    #- pipewire-audio
-    #- alsa-utils
     - terminator
-    - thunar # file manager
-    - evince # pdf viewer
     - vlc
     - network-manager-openvpn-gnome
     - network-manager-gnome
     - brave-browser
     - code
-    - x11-xserver-utils
-    - imagemagick #custom lock
-    - scrot #custom lock
-    - autorandr
     - light
     - yubikey-manager #https://gist.github.com/artizirk/d09ce3570021b0f65469cb450bee5e29
-    - xinput
-    - screengrap
+    - sway
+    - swaybg
+    - swayidle
+    - swayimg
+    - swaylock
+    - fonts-font-awesome
+    - acpi
+    - bc
+    - wdisplays
   apt:
     name: "{{ item }}"
     state: latest
